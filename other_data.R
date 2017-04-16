@@ -5,10 +5,16 @@ library(data.table)
 # station_complexes = read.csv("StationComplexes.csv")
 # stop_times = read.csv("stop_times.txt")
 # mta_performance = read.csv("/Users/rezarad/Google Drive/NYC Data Science Academy/Projects/Project 1/NYC_MTA/MTA_Performance_Data/MTA_Performance_NYCT.csv")
-data_dir = "/mnt/stardust/server/data/nyc_mta/"
+
+# set data directory
+data_dir = "~/data/nyc_mta/"
 
 # Merge all fare files into one dataframe
-setwd(paste(data_dir,"fares",  sep="/"))
+fares_dir = setwd(paste(data_dir,"fares",  sep="/"))
+
+fares_files = paste(fares_dir, list.files(fares_dir), sep="/")
+fares_data = data.table(do.call("rbind", sapply(fares_files, read.csv, sep=";")),
+                        keep.rownames = TRUE)
 
 for (file in list.files()) {
   if (!exists("fares_data")){
@@ -37,10 +43,7 @@ turnstile_data = data.table(do.call("rbind", sapply(turnstile_files, read.csv, s
                             keep.rownames = TRUE)
 
 
-fares_dir = paste(data_dir,"fares", sep="/")
-fares_files = paste(fares_dir, list.files(fares_dir), sep="/")
-fares_data = data.table(do.call("rbind", sapply(fares_files, read.csv, sep=";")),
-                            keep.rownames = TRUE)
+
 
 # for (file in turnstile_files) {
 #   if (!exists("turnstile_dataset")){
