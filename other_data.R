@@ -10,7 +10,7 @@ library(data.table)
 data_dir = "~/data/nyc_mta/"
 
 # Merge all fare files into one dataframe
-fares_dir = "/home/reza/Stardust/server/data/nyc_mta/fares" # Directory of fares data
+fares_dir = "~/Stardust/server/data/nyc_mta/fares" # Directory of fares data
 fares_files = paste(fares_dir, list.files(fares_dir), sep="/") # list of fares data files
 
 fread_add_date_fares = function(file) {
@@ -18,16 +18,16 @@ fread_add_date_fares = function(file) {
   fares_data = data.table(fares_data, date_range = read.csv(file, nrows = 1)[[2]]) # append date of data file to the merged data 
 }
 
-mylist = lapply(fares_files, fread_add_date_fares) # create a list of data.tables 
-fares_dt = rbindlist(mylist, use.names = TRUE, fill = TRUE) # merge the data.tables into one data.table
+fares_list = lapply(fares_files, fread_add_date_fares) # create a list of data.tables 
+fares_dt = rbindlist(fares_list, use.names = TRUE, fill = TRUE) # merge the data.tables into one data.table
 
 
 # Merge all turnstile files into one dataframe
-turnstile_dir = "/home/reza/Stardust/server/data/nyc_mta/turnstile" # Directory of turnstile data
+turnstile_dir = "~/Stardust/server/data/nyc_mta/turnstile" # Directory of turnstile data
 turnstile_files = paste(turnstile_dir, list.files(turnstile_dir), sep="/") # list of turnstile data files
 
-mylist = lapply(turnstile_files, fread) # create a list of data.tables 
-turnstile_dt = rbindlist(mylist, use.names = TRUE, fill = TRUE) # merge the data.tables into one data.table
+turnstile_list = lapply(turnstile_files, fread,  fill = TRUE) # create a list of data.tables 
+turnstile_dt = rbindlist(turnstile_list, use.names = TRUE) # merge the data.tables into one data.table
 
 
 # for (file in turnstile_files) {
