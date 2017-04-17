@@ -10,39 +10,24 @@ library(data.table)
 data_dir = "~/data/nyc_mta/"
 
 # Merge all fare files into one dataframe
-fares_dir = setwd(paste(data_dir,"fares",  sep="/"))
+fares_dir = "/home/reza/Stardust/server/data/nyc_mta/fares" # Directory of fares data
+fares_files = paste(fares_dir, list.files(fares_dir), sep="/") # list of fares data files
 
-fares_files = paste(fares_dir, list.files(fares_dir), sep="/")
-fares_data = data.table(do.call("rbind", sapply(fares_files, read.csv, sep=";")),
-                        keep.rownames = TRUE)
-
-for (file in list.files()) {
-  if (!exists("fares_data")){
-    fares_data <- read.csv(file)
-  }
-  if (exists("fares_data")) {
-    temp_data = read.csv(file)
-    fares_data = rbind(fares_data, temp_data)
-    rm(temp_data)
-  }
+fread_add_date_fares = function(file) {
+  fares_data = fread(file, skip = 2)
+  fares_data = data.table(fares_data, date_range = read.csv(file, nrows = 1)[[2]]) # append date of data file to the merged data 
 }
 
-test_fares = merge("fares_140719.txt","fares_140726.txt")
+mylist = lapply(fares_files, fread_add_date_fares) # create a list of data.tables 
+fares_dt = rbindlist(mylist, use.names = TRUE, fill = TRUE) # merge the data.tables into one data.table
+
 
 # Merge all turnstile files into one dataframe
-setwd(paste(data_dir,"turnstile",  sep="/"))
+turnstile_dir = "/home/reza/Stardust/server/data/nyc_mta/turnstile" # Directory of turnstile data
+turnstile_files = paste(turnstile_dir, list.files(turnstile_dir), sep="/") # list of turnstile data files
 
-
-
-
-# data_folders = c("turnstile","fares")
-
-turnstile_dir = paste(data_dir,"turnstile",  sep="/")
-turnstile_files = paste(turnstile_dir, list.files(turnstile_dir), sep="/")
-turnstile_data = data.table(do.call("rbind", sapply(turnstile_files, read.csv, sep=";")),
-                            keep.rownames = TRUE)
-
-
+mylist = lapply(turnstile_files, fread) # create a list of data.tables 
+turnstile_dt = rbindlist(mylist, use.names = TRUE, fill = TRUE) # merge the data.tables into one data.table
 
 
 # for (file in turnstile_files) {
