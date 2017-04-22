@@ -26,7 +26,11 @@
 *.sql
 *.sqlite
 sql
+
+# Folders #
+######################
 data/
+sandbox/
 
 # OS generated files #
 ######################

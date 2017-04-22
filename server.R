@@ -1,13 +1,17 @@
+library(dplyr)
+library(dbplyr)
+library(tidyr)
+library(shiny)
+library(shinydashboard)
+
 ## server.R ##
-source("./helpers.R")
 
-dbname = "db.sqlite"
-tblname = "turnstile_data"
+source("helpers.R")
 
-function(input, output, session) {
+fares_by_date = getFaresData()
+
+function(input, output) {
   
-  conn = dbConnector(session, dbname = dbname)
-  
-  output$fares_data = dataTableOutput(fares_by_date)
+  output$fares_data = DT::renderDataTable(fares_by_date)
 }
 
