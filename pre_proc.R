@@ -1,10 +1,9 @@
+# import turnstila and fares data files into two SQL databases
 library(RSQLite)
 library(DBI)
-library(dplyr)
-library(dbplyr)
-# make sure your working directory is the directory of the project
 
-conn <- dbConnect(SQLite(), "sql")
+# make sure your working directory is the directory of the project
+conn <- dbConnect(SQLite(), dbname)
 data_dir = paste(getwd(),"data", sep = "/")
 
 fares_dir = paste(data_dir, "fares", sep='/') # Directory of fares data
@@ -32,8 +31,8 @@ for(file in turnstile_files) {
                sep = ",")
 }
 
-fares_tbl = tbl(conn, "fares_data")
 
-turnstile_tbl = tbl(conn, "turnstile_data")
-
+## list tables
+dbListTables(conn)
+## disconnect
 dbDisconnect(conn)

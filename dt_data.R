@@ -45,3 +45,6 @@ turnstile_dt = rbindlist(turnstile_list, use.names = TRUE) # merge the data.tabl
 
 fares_dir = paste(getwd(),'/fares/', sep="")
 fare_files = list.files(fares_dir)
+
+
+
